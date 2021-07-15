@@ -1,21 +1,24 @@
 <?php 
 
-require_once("vendor/autoload.php");
+require_once("vendor/autoload.php");/*SEMPRE VAI EXISTIR PARA TREZER AS DEPENDENCIAS DO COMPOSER*/
 
-$app = new \Slim\Slim();
+use \Slim\Slim;/*SÃO NAMESPACE; OU SEJA DENTRO DO VENDOR TENHO DEZENAS DE CLASSES. QUAL EU QUERO???*/
+
+use \Hcode\Page;/*SÃO NAMESPACE; OU SEJA DENTRO DO VENDOR TENHO DEZENAS DE CLASSES. QUAL EU QUERO???*/
+
+$app = new \Slim\Slim();/*POR CAUSA DAS ROTAS, PARA FACILITAR, O "SEO" AGORA BUSCA POR ROTAS, POR CONTA DE RANQUEAMENTO DE BUSCA*/
 
 $app->config('debug', true);
+/*DAQUI PARA CIMA E SEMPRE O QUE VAMOS PRECISAR PARA CRIAR NOSSAS PAGINAS*/
 
-$app->get('/', function() {
+$app->get('/', function() {/*QUAL A ROTA QUE ESTOU CHAMANDO*/
+
+	$page = new Page();
+
+	$page->setTpl( "index" );
     
-	$sql = new Hcode\DB\Sql();
-
-	$results = $sql->select( "SELECT * FROM tb_users" );
-
-	echo json_encode( $results ); 
-
 });
 
-$app->run();
+$app->run();/*RESPOSÁVEL POR LIGAR TUDO NO SITE*/
 
  ?>
