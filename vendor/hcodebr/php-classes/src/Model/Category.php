@@ -6,8 +6,8 @@ use \Hcode\DB\Sql;
 use \Hcode\Model;
 use \Hcode\Mailer;
 
-class User extends Model {
-
+class Category extends Model {
+/*
 	const SESSION = "User";
 	const SECRET = "HcodePhp7_Secret";
 	const SECRET_IV = "HcodePhp7_Secret_IV";
@@ -120,13 +120,13 @@ class User extends Model {
 		$_SESSION[User::SESSION] = NULL;
 
 	}
-
+*/
 	public static function listAll()
 	{
 
 		$sql = new Sql();
 
-		return $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson");
+		return $sql->select("SELECT * FROM tb_categories ORDER BY descategory");
 
 	}
 
@@ -135,36 +135,84 @@ class User extends Model {
 
 		$sql = new Sql();
 
-		$results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
-			":desperson"=>utf8_decode($this->getdesperson()),
-			":deslogin"=>$this->getdeslogin(),
-			":despassword"=>User::getPasswordHash($this->getdespassword()),
-			":desemail"=>$this->getdesemail(),
-			":nrphone"=>$this->getnrphone(),
-			":inadmin"=>$this->getinadmin()
+		$results = $sql->select( "CALL sp_categories_save(:idcategory, :descategory )", array(
+			":idcategory"=>$this->getidcategory(),
+			":descategory"=>$this->getdescategory()
 		));
 
 		$this->setData($results[0]);
 
 	}
 
-	public function get($iduser)
+	public function get( $idcategory )
 	{
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser", array(
-			":iduser"=>$iduser
+		$results = $sql->select( "SELECT * FROM tb_categories WHERE idcategory = :idcategory", array(
+			":idcategory"=>$idcategory
 		));
 
-		$data = $results[0];
-
-		$data['desperson'] = utf8_encode($data['desperson']);
-
-
-		$this->setData($data);
+		$this->setData( $results[0] );
 
 	}
+
+	public function delete()
+	{
+
+		$sql = new Sql();
+
+		$sql->query( "DELETE FROM tb_categories WHERE idcategory = :idcategory", [
+			":idcategory"=>$this->getidcategory()
+		]);
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
 
 	public function update()
 	{
@@ -185,17 +233,7 @@ class User extends Model {
 
 	}
 
-	public function delete()
-	{
-
-		$sql = new Sql();
-
-		$sql->query("CALL sp_users_delete(:iduser)", array(
-			":iduser"=>$this->getiduser()
-		));
-
-	}
-
+	
 	public static function getForgot($email, $inadmin = true)
 	{
 
@@ -498,6 +536,26 @@ class User extends Model {
 
 	} 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
 }
 
  ?>
