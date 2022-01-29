@@ -142,6 +142,8 @@ class Category extends Model {
 
 		$this->setData($results[0]);
 
+		Category::updateFile();
+
 	}
 
 	public function get( $idcategory )
@@ -166,74 +168,27 @@ class Category extends Model {
 			":idcategory"=>$this->getidcategory()
 		]);
 
+		Category::updateFile();
+
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-
-	public function update()
+	public function updateFile()
 	{
 
-		$sql = new Sql();
+		$categories = Category::listAll();
 
-		$results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
-			":iduser"=>$this->getiduser(),
-			":desperson"=>utf8_decode($this->getdesperson()),
-			":deslogin"=>$this->getdeslogin(),
-			":despassword"=>User::getPasswordHash($this->getdespassword()),
-			":desemail"=>$this->getdesemail(),
-			":nrphone"=>$this->getnrphone(),
-			":inadmin"=>$this->getinadmin()
-		));
+		$html = [];
 
-		$this->setData($results[0]);		
+		foreach ( $categories as $row ) {
+			// code...
+			array_push( $html, '<li><a href="/categories/'.$row['idcategory'].'">'.$row['descategory'].'</a></li>' );
+		}
+		
+		file_put_contents( $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode( "", $html ) );
 
 	}
 
-	
+	/*
 	public static function getForgot($email, $inadmin = true)
 	{
 
